@@ -4,27 +4,29 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Entity //Entity tells Hibernate:"This class should be stored in the database as a table."
-@Table
+@Table (name = "student")
 
 public class Student {
+    //configure auto-generation of primary keys using a database sequence.
     @Id
     @SequenceGenerator(
-            name = "student_sequence",
-            sequenceName = "student_sequence",
-            allocationSize=1
+            name = "student_sequence",//reference name inside the code.
+            sequenceName = "student_sequence",//actual name of the sequence created in the DB
+            allocationSize=1 //generates ID one by one
     )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
+    @GeneratedValue( //Tells Hibernate to auto-generate the ID using the above sequence.
+            strategy = GenerationType.SEQUENCE, //uses DB sequence.
             generator = "student_sequence"
     )
     private Long id;
     private String name;
     private String email;
     private LocalDate dob;
+    //age is not stored in database- it is computed on the fly
     @Transient
     private Integer age;
 
-    public Student() {
+    public Student() { //default constructor -Required by Hibernate for object creation
     }
     public Student(Long id,
                    String name,
@@ -43,6 +45,8 @@ public class Student {
         this.dob = dob;
     }
 
+    //Getters and Setters
+    //Provide access and modification for private fields
     public Long getId() {
         return id;
     }
@@ -82,6 +86,7 @@ public class Student {
     public void setAge(Integer age) {
         this.age = age;
     }
+    //print the object in a readable format
     @Override
     public String toString(){
         return "Student{ "+
